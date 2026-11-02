@@ -262,6 +262,12 @@ body {
     font-weight: 500
 }
 
+.section-subtitle {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 12px
+}
+
 .btn {
     border: 0;
     background: var(--dark);
@@ -311,7 +317,8 @@ tbody tr:hover {
     background: #ffffff55
 }
 
-.patient-row {
+.patient-row,
+.case-row {
     cursor: pointer
 }
 
@@ -365,7 +372,8 @@ tbody tr:hover {
 
 .edit-btn,
 .delete-btn,
-.schedule-btn {
+.schedule-btn,
+.view-btn {
     border: 0;
     background: transparent;
     cursor: pointer;
@@ -387,9 +395,14 @@ tbody tr:hover {
     color: #425d72
 }
 
+.view-btn {
+    color: #526c58
+}
+
 .edit-btn:hover,
 .delete-btn:hover,
-.schedule-btn:hover {
+.schedule-btn:hover,
+.view-btn:hover {
     text-decoration: underline
 }
 
@@ -403,6 +416,8 @@ tbody tr:hover {
     cursor: not-allowed;
     transform: none
 }
+
+/* Mapa corporal */
 
 .diagnostico-field {
     grid-column: 1/-1;
@@ -519,6 +534,8 @@ tbody tr:hover {
     margin-top: 3px
 }
 
+/* Ficha del paciente */
+
 .right-panel {
     min-height: 100vh;
     border-left: 1px solid var(--border);
@@ -620,6 +637,8 @@ tbody tr:hover {
     color: var(--muted)
 }
 
+/* Ventana modal y formularios */
+
 .modal {
     position: fixed;
     inset: 0;
@@ -709,6 +728,16 @@ tbody tr:hover {
     border-color: #666
 }
 
+#formModal input[type="file"] {
+    padding: 9px;
+    background: #fff
+}
+
+#formModal textarea {
+    resize: vertical;
+    min-height: 75px
+}
+
 #formModal fieldset {
     border: 1px solid #c4c6bd;
     border-radius: 7px;
@@ -726,6 +755,96 @@ tbody tr:hover {
 
 #formModal>.btn {
     justify-self: start
+}
+
+/* Elementos específicos de casos clínicos */
+
+.case-photo-preview {
+    width: 112px;
+    height: 112px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    background: #e3e9e0;
+    display: block;
+    margin-top: 8px
+}
+
+.case-photo-placeholder {
+    width: 112px;
+    height: 112px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: #e3e9e0;
+    color: #687261;
+    border: 1px dashed #aab2a2;
+    font-size: 12px;
+    margin-top: 8px
+}
+
+.case-detail {
+    display: grid;
+    gap: 15px
+}
+
+.case-detail-block {
+    padding: 13px 15px;
+    border: 1px solid #d3d8cc;
+    border-radius: 8px;
+    background: #ffffff80
+}
+
+.case-detail-block h3 {
+    font-size: 12px;
+    color: #555b4f;
+    margin-bottom: 7px
+}
+
+.case-detail-block p {
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere
+}
+
+.case-detail-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 8px 0 18px
+}
+
+.case-detail-heading img {
+    width: 76px;
+    height: 76px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--border)
+}
+
+.case-detail-heading strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px
+}
+
+.case-detail-heading span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px
+}
+
+.case-folio {
+    color: #526c58;
+    font-weight: 700
+}
+
+.case-actions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap
 }
 
 @media(max-width:1100px) {
@@ -802,7 +921,8 @@ tbody tr:hover {
         min-width: 110px;
         justify-content: center;
         padding: 13px 9px;
-        gap: 8px
+        gap: 8px;
+        font-size: 12px
     }
 
     .statistics {
@@ -820,6 +940,11 @@ tbody tr:hover {
 
     .panel {
         padding: 20px 15px
+    }
+
+    .panel-header {
+        align-items: flex-start;
+        flex-direction: column
     }
 
     .panel-header h2 {

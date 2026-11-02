@@ -18,10 +18,21 @@
                 <div class="logo-icon">✚</div><span>Quiropracticly</span>
             </div>
             <nav class="menu" aria-label="Navegación principal">
-                <button class="menu-item active" data-section="inicio"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m6 22 18-15 18 15M11 19v22h26V19M19 41V27h10v14"/></svg></span>Inicio</button>
-                <button class="menu-item" data-section="pacientes"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="15" r="8"/><path d="M8 41c0-9 7-15 16-15s16 6 16 15"/></svg></span>Pacientes</button>
-                <button class="menu-item" data-section="citas"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="30" rx="5"/><path d="M15 7v9M33 7v9M8 20h32M16 27h5M27 27h5M16 34h5"/></svg></span>Citas</button>
-                <button class="menu-item" data-section="tratamientos"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="11" y="8" width="26" height="34" rx="5"/><path d="M19 8V5h10v3M24 17v14M17 24h14"/></svg></span>Tratamientos</button>
+                <button class="menu-item active" data-section="inicio">
+                    <span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m6 22 18-15 18 15M11 19v22h26V19M19 41V27h10v14"/></svg></span>Inicio
+                </button>
+                <button class="menu-item" data-section="pacientes">
+                    <span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="15" r="8"/><path d="M8 41c0-9 7-15 16-15s16 6 16 15"/></svg></span>Pacientes
+                </button>
+                <button class="menu-item" data-section="citas">
+                    <span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="30" rx="5"/><path d="M15 7v9M33 7v9M8 20h32M16 27h5M27 27h5M16 34h5"/></svg></span>Citas
+                </button>
+                <button class="menu-item" data-section="tratamientos">
+                    <span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="11" y="8" width="26" height="34" rx="5"/><path d="M19 8V5h10v3M24 17v14M17 24h14"/></svg></span>Tratamientos
+                </button>
+                <button class="menu-item" data-section="casos">
+                    <span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="6" width="30" height="36" rx="4"/><path d="M17 16h14M17 23h14M17 30h8M17 10h14"/></svg></span>Casos clínicos
+                </button>
             </nav>
         </aside>
 
@@ -29,54 +40,46 @@
             <section class="statistics" aria-label="Resumen">
                 <article class="stat-card stat-pacientes">
                     <div class="stat-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                            <circle cx="24" cy="15" r="8" />
-                            <path d="M8 41c0-9 7-15 16-15s16 6 16 15" />
-                        </svg></div>
-                    <div class="stat-info"><span>Total de pacientes</span><strong id="totalPacientes">0</strong><small
-                            id="pacientesEsteMes">+0 este mes</small></div><span class="stat-watermark"
-                        aria-hidden="true">01</span>
+                        <circle cx="24" cy="15" r="8" />
+                        <path d="M8 41c0-9 7-15 16-15s16 6 16 15" />
+                    </svg></div>
+                    <div class="stat-info"><span>Total de pacientes</span><strong id="totalPacientes">0</strong><small id="pacientesEsteMes">+0 este mes</small></div>
+                    <span class="stat-watermark" aria-hidden="true">01</span>
                 </article>
                 <article class="stat-card stat-citas">
                     <div class="stat-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                            <rect x="7" y="11" width="34" height="30" rx="5" />
-                            <path d="M15 7v9M33 7v9M8 20h32M16 27h5M27 27h5M16 34h5" />
-                        </svg></div>
-                    <div class="stat-info"><span>Citas programadas</span><strong id="totalCitas">0</strong><small
-                            id="citasRestantes">0 restantes hoy</small></div><span class="stat-watermark"
-                        aria-hidden="true">02</span>
+                        <rect x="7" y="11" width="34" height="30" rx="5" />
+                        <path d="M15 7v9M33 7v9M8 20h32M16 27h5M27 27h5M16 34h5" />
+                    </svg></div>
+                    <div class="stat-info"><span>Citas programadas</span><strong id="totalCitas">0</strong><small id="citasRestantes">0 restantes hoy</small></div>
+                    <span class="stat-watermark" aria-hidden="true">02</span>
                 </article>
                 <article class="stat-card stat-tratamientos">
                     <div class="stat-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
-                            <rect x="11" y="8" width="26" height="34" rx="5" />
-                            <path d="M19 8V5h10v3M24 17v14M17 24h14" />
-                        </svg></div>
-                    <div class="stat-info"><span>Tratamientos activos</span><strong
-                            id="totalTratamientos">0</strong><small>En curso</small></div><span class="stat-watermark"
-                        aria-hidden="true">03</span>
+                        <rect x="11" y="8" width="26" height="34" rx="5" />
+                        <path d="M19 8V5h10v3M24 17v14M17 24h14" />
+                    </svg></div>
+                    <div class="stat-info"><span>Tratamientos activos</span><strong id="totalTratamientos">0</strong><small>En curso</small></div>
+                    <span class="stat-watermark" aria-hidden="true">03</span>
                 </article>
             </section>
 
-            <section id="inicio" class="section active">
-            </section>
+            <section id="inicio" class="section active"></section>
 
             <section id="pacientes" class="section">
                 <div class="panel">
                     <div class="panel-header">
-                        <h2>Pacientes</h2><button class="btn" id="btnNuevoPaciente">+ Nuevo paciente</button>
+                        <h2>Pacientes</h2>
+                        <button class="btn" id="btnNuevoPaciente">+ Nuevo paciente</button>
                     </div>
-                    <div class="search-container"><input type="search" id="buscarPaciente"
-                            placeholder="Buscar paciente..." aria-label="Buscar paciente"></div>
+                    <div class="search-container">
+                        <input type="search" id="buscarPaciente" placeholder="Buscar paciente..." aria-label="Buscar paciente">
+                    </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Folio</th>
-                                    <th>Nombre</th>
-                                    <th>Edad</th>
-                                    <th>Teléfono</th>
-                                    <th>Diagnóstico</th>
-                                    <th>Estado</th>
-                                    <th></th>
+                                    <th>Folio</th><th>Nombre</th><th>Edad</th><th>Teléfono</th><th>Diagnóstico</th><th>Estado</th><th></th>
                                 </tr>
                             </thead>
                             <tbody id="tablaPacientes"></tbody>
@@ -88,18 +91,14 @@
             <section id="citas" class="section">
                 <div class="panel">
                     <div class="panel-header">
-                        <h2>Citas</h2><button class="btn" id="btnNuevaCita">+ Nueva cita</button>
+                        <h2>Citas</h2>
+                        <button class="btn" id="btnNuevaCita">+ Nueva cita</button>
                     </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Hora</th>
-                                    <th>Paciente</th>
-                                    <th>Tipo</th>
-                                    <th>Estado</th>
-                                    <th></th>
+                                    <th>Fecha</th><th>Hora</th><th>Paciente</th><th>Tipo</th><th>Estado</th><th></th>
                                 </tr>
                             </thead>
                             <tbody id="tablaCitas"></tbody>
@@ -111,21 +110,48 @@
             <section id="tratamientos" class="section">
                 <div class="panel">
                     <div class="panel-header">
-                        <h2>Tratamientos</h2><button class="btn" id="btnNuevoTratamiento">+ Nuevo tratamiento</button>
+                        <h2>Tratamientos</h2>
+                        <button class="btn" id="btnNuevoTratamiento">+ Nuevo tratamiento</button>
                     </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
+                                    <th>Paciente</th><th>Tratamiento</th><th>Fecha de inicio</th><th>Sesiones</th><th>Estado</th><th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaTratamientos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="casos" class="section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Casos clínicos</h2>
+                            <p class="section-subtitle">Registro y seguimiento de expedientes clínicos.</p>
+                        </div>
+                        <button class="btn" id="btnNuevoCaso">+ Nuevo caso clínico</button>
+                    </div>
+                    <div class="search-container">
+                        <input type="search" id="buscarCaso" placeholder="Buscar por paciente, folio o motivo..." aria-label="Buscar caso clínico">
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
                                     <th>Paciente</th>
-                                    <th>Tratamiento</th>
-                                    <th>Fecha de inicio</th>
-                                    <th>Sesiones</th>
+                                    <th>Nombre del caso</th>
+                                    <th>Área</th>
+                                    <th>Fecha</th>
                                     <th>Estado</th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaTratamientos"></tbody>
+                            <tbody id="tablaCasos"></tbody>
                         </table>
                     </div>
                 </div>
@@ -138,10 +164,11 @@
                 <div class="patient-title">
                     <div class="avatar big" id="avatarPaciente">?</div>
                     <div>
-                        <h2 id="nombrePaciente">Selecciona un paciente</h2><span id="folioPaciente">Folio —</span>
+                        <h2 id="nombrePaciente">Selecciona un paciente</h2>
+                        <span id="folioPaciente">Folio —</span>
                     </div>
-                </div><button class="btn ficha-cita" id="btnCitaPaciente" type="button" disabled>+ Nueva cita para este
-                    paciente</button>
+                </div>
+                <button class="btn ficha-cita" id="btnCitaPaciente" type="button" disabled>+ Nueva cita para este paciente</button>
                 <div class="details">
                     <div><span>Edad</span><strong id="edadPaciente">—</strong></div>
                     <div><span>Teléfono</span><strong id="telefonoPaciente">—</strong></div>
@@ -159,7 +186,8 @@
     </div>
 
     <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
-        <div class="modal-content"><button id="cerrarModal" class="cerrar" type="button" aria-label="Cerrar">×</button>
+        <div class="modal-content">
+            <button id="cerrarModal" class="cerrar" type="button" aria-label="Cerrar">×</button>
             <h2 id="modalTitulo"></h2>
             <p id="modalDescripcion" class="modal-description"></p>
             <form id="formModal"></form>
@@ -167,5 +195,4 @@
     </div>
     <script src="script.js"></script>
 </body>
-
 </html>
