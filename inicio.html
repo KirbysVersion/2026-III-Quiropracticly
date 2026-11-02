@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiropracticly | Sistema</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="estilo.css">
+</head>
+
+<body>
+    <div class="app home-view">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">✚</div><span>Quiropracticly</span>
+            </div>
+            <nav class="menu" aria-label="Navegación principal">
+                <button class="menu-item active" data-section="inicio"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="m6 22 18-15 18 15M11 19v22h26V19M19 41V27h10v14"/></svg></span>Inicio</button>
+                <button class="menu-item" data-section="pacientes"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="15" r="8"/><path d="M8 41c0-9 7-15 16-15s16 6 16 15"/></svg></span>Pacientes</button>
+                <button class="menu-item" data-section="citas"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="7" y="11" width="34" height="30" rx="5"/><path d="M15 7v9M33 7v9M8 20h32M16 27h5M27 27h5M16 34h5"/></svg></span>Citas</button>
+                <button class="menu-item" data-section="tratamientos"><span class="menu-icon"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="11" y="8" width="26" height="34" rx="5"/><path d="M19 8V5h10v3M24 17v14M17 24h14"/></svg></span>Tratamientos</button>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <section class="statistics" aria-label="Resumen">
+                <article class="stat-card stat-pacientes">
+                    <div class="stat-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
+                            <circle cx="24" cy="15" r="8" />
+                            <path d="M8 41c0-9 7-15 16-15s16 6 16 15" />
+                        </svg></div>
+                    <div class="stat-info"><span>Total de pacientes</span><strong id="totalPacientes">0</strong><small
+                            id="pacientesEsteMes">+0 este mes</small></div><span class="stat-watermark"
+                        aria-hidden="true">01</span>
+                </article>
+                <article class="stat-card stat-citas">
+                    <div class="stat-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
+                            <rect x="7" y="11" width="34" height="30" rx="5" />
+                            <path d="M15 7v9M33 7v9M8 20h32M16 27h5M27 27h5M16 34h5" />
+                        </svg></div>
+                    <div class="stat-info"><span>Citas programadas</span><strong id="totalCitas">0</strong><small
+                            id="citasRestantes">0 restantes hoy</small></div><span class="stat-watermark"
+                        aria-hidden="true">02</span>
+                </article>
+                <article class="stat-card stat-tratamientos">
+                    <div class="stat-icon"><svg viewBox="0 0 48 48" aria-hidden="true">
+                            <rect x="11" y="8" width="26" height="34" rx="5" />
+                            <path d="M19 8V5h10v3M24 17v14M17 24h14" />
+                        </svg></div>
+                    <div class="stat-info"><span>Tratamientos activos</span><strong
+                            id="totalTratamientos">0</strong><small>En curso</small></div><span class="stat-watermark"
+                        aria-hidden="true">03</span>
+                </article>
+            </section>
+
+            <section id="inicio" class="section active">
+            </section>
+
+            <section id="pacientes" class="section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Pacientes</h2><button class="btn" id="btnNuevoPaciente">+ Nuevo paciente</button>
+                    </div>
+                    <div class="search-container"><input type="search" id="buscarPaciente"
+                            placeholder="Buscar paciente..." aria-label="Buscar paciente"></div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Nombre</th>
+                                    <th>Edad</th>
+                                    <th>Teléfono</th>
+                                    <th>Diagnóstico</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaPacientes"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="citas" class="section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Citas</h2><button class="btn" id="btnNuevaCita">+ Nueva cita</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Paciente</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaCitas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tratamientos" class="section">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h2>Tratamientos</h2><button class="btn" id="btnNuevoTratamiento">+ Nuevo tratamiento</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Tratamiento</th>
+                                    <th>Fecha de inicio</th>
+                                    <th>Sesiones</th>
+                                    <th>Estado</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaTratamientos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="right-panel" aria-label="Ficha del paciente seleccionado">
+            <div class="patient-info">
+                <p class="eyebrow">FICHA DEL PACIENTE</p>
+                <div class="patient-title">
+                    <div class="avatar big" id="avatarPaciente">?</div>
+                    <div>
+                        <h2 id="nombrePaciente">Selecciona un paciente</h2><span id="folioPaciente">Folio —</span>
+                    </div>
+                </div><button class="btn ficha-cita" id="btnCitaPaciente" type="button" disabled>+ Nueva cita para este
+                    paciente</button>
+                <div class="details">
+                    <div><span>Edad</span><strong id="edadPaciente">—</strong></div>
+                    <div><span>Teléfono</span><strong id="telefonoPaciente">—</strong></div>
+                    <div><span>Diagnóstico</span><strong id="diagnosticoPaciente">—</strong></div>
+                    <div><span>Fecha de inicio</span><strong id="inicioPaciente">—</strong></div>
+                    <div><span>Estado</span><strong id="estadoPaciente">—</strong></div>
+                    <div><span>Notas</span><strong id="notasPaciente">—</strong></div>
+                </div>
+                <h3>Historial</h3>
+                <div id="historialPaciente" class="historial">
+                    <p>Selecciona un paciente para consultar su historial.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+        <div class="modal-content"><button id="cerrarModal" class="cerrar" type="button" aria-label="Cerrar">×</button>
+            <h2 id="modalTitulo"></h2>
+            <p id="modalDescripcion" class="modal-description"></p>
+            <form id="formModal"></form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
