@@ -253,10 +253,10 @@ function renderCitas() {
                 </td>
                 <td class="row-actions">
                     ${["Cancelada", "Completada"].includes(c.estado)
-                        ? `<button class="edit-btn" data-restaurar-cita="${c.id}">Restaurar</button>`
-                        : `<button class="delete-btn" data-cancelar-cita="${c.id}">Cancelar</button>
+                ? `<button class="edit-btn" data-restaurar-cita="${c.id}">Restaurar</button>`
+                : `<button class="delete-btn" data-cancelar-cita="${c.id}">Cancelar</button>
                            <button class="edit-btn" data-completar-cita="${c.id}">Completar</button>`
-                    }
+            }
                     <button class="delete-btn" data-delete-cita="${c.id}">Eliminar</button>
                 </td>
             </tr>
@@ -396,28 +396,28 @@ function camposCaso() {
     return `
         <div class="form-grid">
             ${campo("Nombre del caso clínico", "nombreCaso", "text", {
-                required: true,
-                placeholder: "Ej. Dolor lumbar crónico"
-            })}
+        required: true,
+        placeholder: "Ej. Dolor lumbar crónico"
+    })}
 
             ${selector("Paciente asociado", "pacienteId", pacientes)}
 
             ${campo("Motivo de consulta", "motivo", "text", {
-                required: true,
-                placeholder: "Motivo principal de atención"
-            })}
+        required: true,
+        placeholder: "Motivo principal de atención"
+    })}
 
             ${campo("Área o especialidad", "area", "text", {
-                required: true,
-                placeholder: "Ej. Quiropráctica, columna vertebral..."
-            })}
+        required: true,
+        placeholder: "Ej. Quiropráctica, columna vertebral..."
+    })}
 
             ${campo("Fecha de nacimiento", "fechaNacimiento", "date")}
 
             ${campo("Fecha de creación", "fechaCreacion", "date", {
-                required: true,
-                value: hoyISO()
-            })}
+        required: true,
+        value: hoyISO()
+    })}
 
             <div class="wide">
                 <label>Fotografía del paciente
@@ -439,11 +439,11 @@ function camposCaso() {
             </label>
 
             ${selector("Estado del caso", "estado", [
-                ["Activo", "Activo"],
-                ["En seguimiento", "En seguimiento"],
-                ["Finalizado", "Finalizado"],
-                ["Suspendido", "Suspendido"]
-            ])}
+        ["Activo", "Activo"],
+        ["En seguimiento", "En seguimiento"],
+        ["Finalizado", "Finalizado"],
+        ["Suspendido", "Suspendido"]
+    ])}
         </div>
     `;
 }
@@ -642,9 +642,9 @@ function verCaso(id) {
         <div class="case-detail">
             <div class="case-detail-heading">
                 ${caso.fotografia
-                    ? `<img src="${caso.fotografia}" alt="Fotografía del paciente">`
-                    : `<div class="case-photo-placeholder">Sin foto</div>`
-                }
+            ? `<img src="${caso.fotografia}" alt="Fotografía del paciente">`
+            : `<div class="case-photo-placeholder">Sin foto</div>`
+        }
                 <div>
                     <strong>${escapar(caso.nombreCaso)}</strong>
                     <span>${escapar(paciente?.nombre || "Paciente no disponible")}</span>
@@ -960,9 +960,9 @@ function editarPaciente(id) {
             ${campoDiagnostico()}
             ${campo("Fecha de inicio", "fechaInicio", "date")}
             ${selector("Estado del paciente", "estado", [
-                ["Activo", "Activo"],
-                ["Inactivo", "Inactivo"]
-            ])}
+        ["Activo", "Activo"],
+        ["Inactivo", "Inactivo"]
+    ])}
             <label class="wide">Notas clínicas
                 <textarea name="notas" rows="3" placeholder="Antecedentes, observaciones u otra información"></textarea>
             </label>
@@ -1060,9 +1060,9 @@ document.getElementById("btnNuevoPaciente").addEventListener("click", () => {
             ${campoDiagnostico()}
             ${campo("Fecha de inicio", "fechaInicio", "date")}
             ${selector("Estado del paciente", "estado", [
-                ["Activo", "Activo"],
-                ["Inactivo", "Inactivo"]
-            ])}
+        ["Activo", "Activo"],
+        ["Inactivo", "Inactivo"]
+    ])}
             <label class="wide">Notas clínicas
                 <textarea name="notas" rows="3" placeholder="Antecedentes, observaciones u otra información"></textarea>
             </label>
@@ -1186,15 +1186,15 @@ function abrirFormularioCita(pacienteId = null) {
                 ${campo("Fecha", "fecha", "date", { required: true, value: hoyISO() })}
                 ${campo("Hora", "hora", "time", { required: true })}
                 ${campo("Tipo de cita", "tipo", "text", {
-                    required: true,
-                    placeholder: "Consulta, seguimiento..."
-                })}
+            required: true,
+            placeholder: "Consulta, seguimiento..."
+        })}
                 ${selector("Estado", "estado", [
-                    ["Pendiente", "Pendiente"],
-                    ["Confirmada", "Confirmada"],
-                    ["Completada", "Completada"],
-                    ["Cancelada", "Cancelada"]
-                ])}
+            ["Pendiente", "Pendiente"],
+            ["Confirmada", "Confirmada"],
+            ["Completada", "Completada"],
+            ["Cancelada", "Cancelada"]
+        ])}
             </div>
         `,
         v => {
@@ -1238,17 +1238,17 @@ document.getElementById("btnNuevoTratamiento").addEventListener("click", () => {
                 ${selector("Paciente", "pacienteId", pacientes)}
                 ${campo("Tratamiento", "nombre", "text", { required: true })}
                 ${campo("Fecha de inicio", "fechaInicio", "date", {
-                    required: true,
-                    value: hoyISO()
-                })}
+            required: true,
+            value: hoyISO()
+        })}
                 ${campo("Sesiones realizadas / totales", "sesiones", "text", {
-                    placeholder: "0 / 10"
-                })}
+            placeholder: "0 / 10"
+        })}
                 ${selector("Estado", "estado", [
-                    ["Activo", "Activo"],
-                    ["Finalizado", "Finalizado"],
-                    ["Pausado", "Pausado"]
-                ])}
+            ["Activo", "Activo"],
+            ["Finalizado", "Finalizado"],
+            ["Pausado", "Pausado"]
+        ])}
             </div>
         `,
         v => {
