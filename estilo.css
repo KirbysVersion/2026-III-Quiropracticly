@@ -50,7 +50,7 @@ body {
 }
 
 .logo-icon {
-    font-size: 31px
+    font-size: 29px
 }
 
 .logo span {
@@ -75,7 +75,7 @@ body {
     font-size: 15px;
     text-align: left;
     cursor: pointer;
-    transition: .2s
+    transition: .1s
 }
 
 .menu-item:hover,
@@ -199,7 +199,7 @@ body {
 .stat-info span {
     font-size: 13px;
     font-weight: 600;
-    color: #5d6258
+    color: #5d6258;
 }
 
 .stat-info strong {
@@ -437,7 +437,7 @@ tbody tr:hover {
     justify-self: start;
     border: 0;
     background: transparent;
-    color: #526c58;
+    color: #3d9752;
     font: 600 12px inherit;
     padding: 4px 0;
     cursor: pointer
@@ -734,7 +734,7 @@ tbody tr:hover {
 }
 
 #formModal textarea {
-    resize: vertical;
+    resize: none;
     min-height: 75px
 }
 
