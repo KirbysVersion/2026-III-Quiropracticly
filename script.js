@@ -384,13 +384,104 @@ function renderTratamientos() {
             </td>
         </tr>
     `).join("");
-
     tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
-        b.addEventListener("click", () => {
-            datos.tratamientos = datos.tratamientos.filter(t => t.id !== Number(b.dataset.deleteTratamiento));
+    b.addEventListener("click", async () => {
+        const id = Number(b.dataset.deleteTratamiento);
+        if (!confirm("¿Eliminar este tratamiento?")) return;
+
+        try {
+            const respuesta = await fetch("api/tratamientos/eliminar.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            });
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "Error al eliminar.");
+            }
+
+            datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
             actualizarTodo();
-        })
-    );
+        } catch (error) {
+            alert(error.message);
+        }
+    })
+);
+tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
+    b.addEventListener("click", async () => {
+        const id = Number(b.dataset.deleteTratamiento);
+        if (!confirm("¿Eliminar este tratamiento?")) return;
+
+        try {
+            const respuesta = await fetch("api/tratamientos/eliminar.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            });
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "Error al eliminar.");
+            }
+
+            datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
+            actualizarTodo();
+        } catch (error) {
+            alert(error.message);
+        }
+    })
+);
+
+tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
+    b.addEventListener("click", async () => {
+        const id = Number(b.dataset.deleteTratamiento);
+        if (!confirm("¿Eliminar este tratamiento?")) return;
+
+        try {
+            const respuesta = await fetch("api/tratamientos/eliminar.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id })
+            });
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "Error al eliminar.");
+            }
+
+            datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
+            actualizarTodo();
+        } catch (error) {
+            alert(error.message);
+        }
+    })
+);
+
+tbody.querySelectorAll("[data-completar-tratamiento]").forEach(b =>
+    b.addEventListener("click", async () => {
+        const id = Number(b.dataset.completarTratamiento);
+
+        try {
+            const respuesta = await fetch("api/tratamientos/actualizar.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id, estado: "Completado" })
+            });
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "Error al actualizar.");
+            }
+
+            const tratamiento = datos.tratamientos.find(t => Number(t.id) === id);
+            if (tratamiento) tratamiento.estado = "Completado";
+            actualizarTodo();
+        } catch (error) {
+            alert(error.message);
+        }
+    })
+);
 
     tbody.querySelectorAll("[data-completar-tratamiento]").forEach(b =>
         b.addEventListener("click", () => {
@@ -1429,22 +1520,64 @@ document.getElementById("btnNuevoTratamiento").addEventListener("click", () => {
                 ${selector("Paciente", "pacienteId", pacientes)}
                 ${campo("Tratamiento", "nombre", "text", { required: true })}
                 ${campo("Fecha de inicio", "fechaInicio", "date", {
-            required: true,
-            value: hoyISO()
-        })}
+                    required: true,
+                    value: hoyISO()
+                })}
                 ${campo("Sesiones realizadas / totales", "sesiones", "text", {
-            placeholder: "0 / 10"
-        })}
+                    placeholder: "0 / 10"
+                })}
                 ${selector("Estado", "estado", [
-            ["Activo", "Activo"],
-            ["Finalizado", "Finalizado"],
-            ["Pausado", "Pausado"]
-        ])}
+                    ["Activo", "Activo"],
+                    ["Completado", "Completado"],
+                    ["Suspendido", "Suspendido"]
+                ])}
             </div>
         `,
-        v => {
+        async v => {
+            const partes = v.sesiones.trim().split("/");
+            const sesionesCompletadas = partes[0].trim() === ""
+                ? 0
+                : Number(partes[0].trim());
+
+            const sesionesTotales = partes.length > 1
+                ? Number(partes[1].trim())
+                : null;
+
+            if (
+                !Number.isInteger(sesionesCompletadas) ||
+                sesionesCompletadas < 0 ||
+                (partes.length > 2) ||
+                (sesionesTotales !== null &&
+                    (!Number.isInteger(sesionesTotales) ||
+                    sesionesTotales < 1 ||
+                    sesionesCompletadas > sesionesTotales))
+            ) {
+                throw new Error("Escribe las sesiones en el formato 0 / 10.");
+            }
+
+            const respuesta = await fetch("api/tratamientos/guardar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    pacienteId: Number(v.pacienteId),
+                    nombre: v.nombre.trim(),
+                    fechaInicio: v.fechaInicio,
+                    sesionesCompletadas,
+                    sesionesTotales,
+                    estado: v.estado
+                })
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "No se pudo registrar el tratamiento.");
+            }
+
             datos.tratamientos.push({
-                id: siguienteId(),
+                id: Number(resultado.id),
                 pacienteId: Number(v.pacienteId),
                 nombre: v.nombre.trim(),
                 fechaInicio: v.fechaInicio,
@@ -1453,6 +1586,7 @@ document.getElementById("btnNuevoTratamiento").addEventListener("click", () => {
             });
 
             actualizarTodo();
+            alert("Tratamiento registrado correctamente.");
         }
     );
 });
@@ -1488,10 +1622,36 @@ document.querySelectorAll(".menu-item").forEach(b => {
     });
 });
 
+async function cargarTratamientosBD() {
+    try {
+        const respuesta = await fetch("api/tratamientos/listar.php");
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(resultado.mensaje);
+        }
+
+        datos.tratamientos = resultado.tratamientos.map(t => ({
+            ...t,
+            id: Number(t.id),
+            pacienteId: Number(t.pacienteId)
+        }));
+
+        actualizarTodo();
+
+        console.log("Tratamientos consultados desde MySQL.");
+
+    } catch (error) {
+        console.error("Error al cargar tratamientos:", error);
+        alert("No se pudieron cargar los tratamientos desde MySQL.");
+    }
+}
 
 
 actualizarTodo();
 
 cargarPacientesBD().then(() => {
-    cargarCitasBD();
+    cargarCitasBD().then(() => {
+        cargarTratamientosBD();
+    });
 });
