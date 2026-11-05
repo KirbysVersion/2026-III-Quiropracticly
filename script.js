@@ -385,103 +385,103 @@ function renderTratamientos() {
         </tr>
     `).join("");
     tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
-    b.addEventListener("click", async () => {
-        const id = Number(b.dataset.deleteTratamiento);
-        if (!confirm("¿Eliminar este tratamiento?")) return;
+        b.addEventListener("click", async () => {
+            const id = Number(b.dataset.deleteTratamiento);
+            if (!confirm("¿Eliminar este tratamiento?")) return;
 
-        try {
-            const respuesta = await fetch("api/tratamientos/eliminar.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id })
-            });
-            const resultado = await respuesta.json();
+            try {
+                const respuesta = await fetch("api/tratamientos/eliminar.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id })
+                });
+                const resultado = await respuesta.json();
 
-            if (!respuesta.ok || !resultado.success) {
-                throw new Error(resultado.mensaje || "Error al eliminar.");
+                if (!respuesta.ok || !resultado.success) {
+                    throw new Error(resultado.mensaje || "Error al eliminar.");
+                }
+
+                datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
+                actualizarTodo();
+            } catch (error) {
+                alert(error.message);
             }
+        })
+    );
+    tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
+        b.addEventListener("click", async () => {
+            const id = Number(b.dataset.deleteTratamiento);
+            if (!confirm("¿Eliminar este tratamiento?")) return;
 
-            datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
-            actualizarTodo();
-        } catch (error) {
-            alert(error.message);
-        }
-    })
-);
-tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
-    b.addEventListener("click", async () => {
-        const id = Number(b.dataset.deleteTratamiento);
-        if (!confirm("¿Eliminar este tratamiento?")) return;
+            try {
+                const respuesta = await fetch("api/tratamientos/eliminar.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id })
+                });
+                const resultado = await respuesta.json();
 
-        try {
-            const respuesta = await fetch("api/tratamientos/eliminar.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id })
-            });
-            const resultado = await respuesta.json();
+                if (!respuesta.ok || !resultado.success) {
+                    throw new Error(resultado.mensaje || "Error al eliminar.");
+                }
 
-            if (!respuesta.ok || !resultado.success) {
-                throw new Error(resultado.mensaje || "Error al eliminar.");
+                datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
+                actualizarTodo();
+            } catch (error) {
+                alert(error.message);
             }
+        })
+    );
 
-            datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
-            actualizarTodo();
-        } catch (error) {
-            alert(error.message);
-        }
-    })
-);
+    tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
+        b.addEventListener("click", async () => {
+            const id = Number(b.dataset.deleteTratamiento);
+            if (!confirm("¿Eliminar este tratamiento?")) return;
 
-tbody.querySelectorAll("[data-delete-tratamiento]").forEach(b =>
-    b.addEventListener("click", async () => {
-        const id = Number(b.dataset.deleteTratamiento);
-        if (!confirm("¿Eliminar este tratamiento?")) return;
+            try {
+                const respuesta = await fetch("api/tratamientos/eliminar.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id })
+                });
+                const resultado = await respuesta.json();
 
-        try {
-            const respuesta = await fetch("api/tratamientos/eliminar.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id })
-            });
-            const resultado = await respuesta.json();
+                if (!respuesta.ok || !resultado.success) {
+                    throw new Error(resultado.mensaje || "Error al eliminar.");
+                }
 
-            if (!respuesta.ok || !resultado.success) {
-                throw new Error(resultado.mensaje || "Error al eliminar.");
+                datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
+                actualizarTodo();
+            } catch (error) {
+                alert(error.message);
             }
+        })
+    );
 
-            datos.tratamientos = datos.tratamientos.filter(t => Number(t.id) !== id);
-            actualizarTodo();
-        } catch (error) {
-            alert(error.message);
-        }
-    })
-);
+    tbody.querySelectorAll("[data-completar-tratamiento]").forEach(b =>
+        b.addEventListener("click", async () => {
+            const id = Number(b.dataset.completarTratamiento);
 
-tbody.querySelectorAll("[data-completar-tratamiento]").forEach(b =>
-    b.addEventListener("click", async () => {
-        const id = Number(b.dataset.completarTratamiento);
+            try {
+                const respuesta = await fetch("api/tratamientos/actualizar.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id, estado: "Completado" })
+                });
+                const resultado = await respuesta.json();
 
-        try {
-            const respuesta = await fetch("api/tratamientos/actualizar.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id, estado: "Completado" })
-            });
-            const resultado = await respuesta.json();
+                if (!respuesta.ok || !resultado.success) {
+                    throw new Error(resultado.mensaje || "Error al actualizar.");
+                }
 
-            if (!respuesta.ok || !resultado.success) {
-                throw new Error(resultado.mensaje || "Error al actualizar.");
+                const tratamiento = datos.tratamientos.find(t => Number(t.id) === id);
+                if (tratamiento) tratamiento.estado = "Completado";
+                actualizarTodo();
+            } catch (error) {
+                alert(error.message);
             }
-
-            const tratamiento = datos.tratamientos.find(t => Number(t.id) === id);
-            if (tratamiento) tratamiento.estado = "Completado";
-            actualizarTodo();
-        } catch (error) {
-            alert(error.message);
-        }
-    })
-);
+        })
+    );
 
     tbody.querySelectorAll("[data-completar-tratamiento]").forEach(b =>
         b.addEventListener("click", () => {
@@ -605,11 +605,10 @@ function camposCaso() {
                 <textarea name="datosAdicionales" rows="3" placeholder="Información complementaria del caso"></textarea>
             </label>
 
-            ${selector("Estado del caso", "estado", [
-        ["Activo", "Activo"],
+${selector("Estado del caso", "estado", [
+        ["Abierto", "Abierto"],
         ["En seguimiento", "En seguimiento"],
-        ["Finalizado", "Finalizado"],
-        ["Suspendido", "Suspendido"]
+        ["Cerrado", "Cerrado"]
     ])}
         </div>
     `;
@@ -664,68 +663,75 @@ function leerFotografia(archivo) {
 
 function nuevoCaso() {
     if (!datos.pacientes.length) {
-        return alert("Primero debes registrar un paciente para crear un caso clínico.");
+        return alert("Primero debes registrar un paciente.");
     }
 
     abrirModal(
         "Nuevo caso clínico",
-        "Completa la información para crear un nuevo expediente clínico.",
+        "Completa la información del expediente.",
         camposCaso(),
         async valores => {
-            const archivo = form.elements.namedItem("fotografia").files[0];
-            const fotografia = await leerFotografia(archivo);
-
             const pacienteId = Number(valores.pacienteId);
             const paciente = pacientePorId(pacienteId);
 
             if (!paciente) {
-                alert("No se encontró el paciente seleccionado.");
-                return;
+                throw new Error("Paciente no encontrado.");
             }
 
-            const caso = {
-                id: siguienteId(),
-                folio: siguienteFolioCaso(),
+            const respuesta = await fetch("api/casos/guardar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    pacienteId,
+                    nombreCaso: valores.nombreCaso.trim(),
+                    motivo: valores.motivo.trim(),
+                    area: valores.area.trim(),
+                    diagnostico: valores.diagnostico.trim(),
+                    antecedentes: valores.antecedentes.trim(),
+                    datosAdicionales: valores.datosAdicionales.trim(),
+                    fechaCreacion: valores.fechaCreacion || hoyISO(),
+                    estado: valores.estado
+                })
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "No se pudo registrar el caso.");
+            }
+
+            datos.casosClinicos.push({
+                id: Number(resultado.id),
+                folio: resultado.folio,
                 pacienteId,
                 nombreCaso: valores.nombreCaso.trim(),
                 motivo: valores.motivo.trim(),
                 area: valores.area.trim(),
-                fechaNacimiento: valores.fechaNacimiento,
-                fotografia,
+                fechaNacimiento: valores.fechaNacimiento || "",
+                fotografia: "",
                 diagnostico: valores.diagnostico.trim(),
                 antecedentes: valores.antecedentes.trim(),
                 datosAdicionales: valores.datosAdicionales.trim(),
                 fechaCreacion: valores.fechaCreacion || hoyISO(),
                 estado: valores.estado
-            };
-
-            datos.casosClinicos.push(caso);
-
-            // Vincula la información personal al expediente del paciente.
-            if (caso.fechaNacimiento) {
-                paciente.fechaNacimiento = caso.fechaNacimiento;
-            }
-
-            if (fotografia) {
-                paciente.fotografia = fotografia;
-            }
-
-            paciente.historial = paciente.historial || [];
-            paciente.historial.unshift({
-                fecha: caso.fechaCreacion,
-                descripcion: `Caso clínico creado: ${caso.nombreCaso} (${caso.folio})`
             });
 
             pacienteSeleccionado = pacienteId;
             actualizarTodo();
+
+            alert("Caso clínico registrado correctamente.");
         }
     );
 
     configurarPreviewFoto();
 }
 
+
+
 function editarCaso(id) {
-    const caso = datos.casosClinicos.find(c => c.id === id);
+    const caso = datos.casosClinicos.find(c => Number(c.id) === Number(id));
     if (!caso) return;
 
     abrirModal(
@@ -733,27 +739,49 @@ function editarCaso(id) {
         `Actualiza la información del expediente ${caso.folio}.`,
         camposCaso(),
         async valores => {
-            const archivo = form.elements.namedItem("fotografia").files[0];
-            const fotografiaNueva = await leerFotografia(archivo);
-
             const pacienteAnterior = pacientePorId(caso.pacienteId);
             const nuevoPacienteId = Number(valores.pacienteId);
             const nuevoPaciente = pacientePorId(nuevoPacienteId);
 
             if (!nuevoPaciente) {
-                alert("No se encontró el paciente seleccionado.");
-                return;
+                throw new Error("No se encontró el paciente seleccionado.");
             }
 
-            const pacienteCambio = caso.pacienteId !== nuevoPacienteId;
+            const respuesta = await fetch("api/casos/actualizar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: Number(caso.id),
+                    pacienteId: nuevoPacienteId,
+                    nombreCaso: valores.nombreCaso.trim(),
+                    motivo: valores.motivo.trim(),
+                    area: valores.area.trim(),
+                    diagnostico: valores.diagnostico.trim(),
+                    antecedentes: valores.antecedentes.trim(),
+                    datosAdicionales: valores.datosAdicionales.trim(),
+                    fechaCreacion: valores.fechaCreacion,
+                    estado: valores.estado
+                })
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(
+                    resultado.mensaje || "No se pudo actualizar el caso clínico."
+                );
+            }
+
+            const pacienteCambio = Number(caso.pacienteId) !== nuevoPacienteId;
+            const nombreAnterior = caso.nombreCaso;
 
             Object.assign(caso, {
                 pacienteId: nuevoPacienteId,
                 nombreCaso: valores.nombreCaso.trim(),
                 motivo: valores.motivo.trim(),
                 area: valores.area.trim(),
-                fechaNacimiento: valores.fechaNacimiento,
-                fotografia: fotografiaNueva || caso.fotografia || "",
                 diagnostico: valores.diagnostico.trim(),
                 antecedentes: valores.antecedentes.trim(),
                 datosAdicionales: valores.datosAdicionales.trim(),
@@ -763,12 +791,11 @@ function editarCaso(id) {
 
             if (pacienteCambio && pacienteAnterior) {
                 pacienteAnterior.historial = (pacienteAnterior.historial || []).filter(
-                    h => h.descripcion !== `Caso clínico creado: ${caso.nombreCaso} (${caso.folio})`
+                    h => h.descripcion !==
+                        `Caso clínico creado: ${nombreAnterior} (${caso.folio})`
                 );
             }
 
-            nuevoPaciente.fechaNacimiento = caso.fechaNacimiento || nuevoPaciente.fechaNacimiento;
-            nuevoPaciente.fotografia = caso.fotografia || nuevoPaciente.fotografia;
             nuevoPaciente.historial = nuevoPaciente.historial || [];
 
             nuevoPaciente.historial.unshift({
@@ -778,23 +805,26 @@ function editarCaso(id) {
 
             pacienteSeleccionado = nuevoPacienteId;
             actualizarTodo();
+
+            alert("Caso clínico actualizado correctamente.");
         },
         {
             nombreCaso: caso.nombreCaso,
             pacienteId: String(caso.pacienteId),
             motivo: caso.motivo,
-            area: caso.area,
-            fechaNacimiento: caso.fechaNacimiento,
+            area: caso.area || "",
+            fechaNacimiento: caso.fechaNacimiento || "",
             fechaCreacion: caso.fechaCreacion,
-            diagnostico: caso.diagnostico,
-            antecedentes: caso.antecedentes,
-            datosAdicionales: caso.datosAdicionales,
+            diagnostico: caso.diagnostico || "",
+            antecedentes: caso.antecedentes || "",
+            datosAdicionales: caso.datosAdicionales || "",
             estado: caso.estado
         }
     );
 
     configurarPreviewFoto(caso.fotografia || "");
 }
+
 
 function verCaso(id) {
     const caso = datos.casosClinicos.find(c => c.id === id);
@@ -871,26 +901,59 @@ function verCaso(id) {
     modal.classList.remove("hidden");
 }
 
-function eliminarCaso(id) {
-    const caso = datos.casosClinicos.find(c => c.id === id);
+
+async function eliminarCaso(id) {
+    const caso = datos.casosClinicos.find(
+        c => Number(c.id) === Number(id)
+    );
+
     if (!caso) return;
 
     if (!confirm(`¿Eliminar el caso clínico ${caso.folio}? Esta acción no se puede deshacer.`)) {
         return;
     }
 
-    datos.casosClinicos = datos.casosClinicos.filter(c => c.id !== id);
+    try {
+        const respuesta = await fetch("api/casos/eliminar.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: Number(id)
+            })
+        });
 
-    const paciente = pacientePorId(caso.pacienteId);
+        const resultado = await respuesta.json();
 
-    if (paciente) {
-        paciente.historial = (paciente.historial || []).filter(
-            h => !h.descripcion.includes(`(${caso.folio})`)
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(
+                resultado.mensaje || "No se pudo eliminar el caso clínico."
+            );
+        }
+
+        datos.casosClinicos = datos.casosClinicos.filter(
+            c => Number(c.id) !== Number(id)
         );
-    }
 
-    actualizarTodo();
+        const paciente = pacientePorId(caso.pacienteId);
+
+        if (paciente) {
+            paciente.historial = (paciente.historial || []).filter(
+                h => !h.descripcion.includes(`(${caso.folio})`)
+            );
+        }
+
+        actualizarTodo();
+
+        alert("Caso clínico eliminado correctamente.");
+
+    } catch (error) {
+        console.error("Error al eliminar el caso clínico:", error);
+        alert(error.message || "Ocurrió un error al eliminar el caso clínico.");
+    }
 }
+
 
 /* FICHA DEL PACIENTE */
 
@@ -1520,17 +1583,17 @@ document.getElementById("btnNuevoTratamiento").addEventListener("click", () => {
                 ${selector("Paciente", "pacienteId", pacientes)}
                 ${campo("Tratamiento", "nombre", "text", { required: true })}
                 ${campo("Fecha de inicio", "fechaInicio", "date", {
-                    required: true,
-                    value: hoyISO()
-                })}
+            required: true,
+            value: hoyISO()
+        })}
                 ${campo("Sesiones realizadas / totales", "sesiones", "text", {
-                    placeholder: "0 / 10"
-                })}
+            placeholder: "0 / 10"
+        })}
                 ${selector("Estado", "estado", [
-                    ["Activo", "Activo"],
-                    ["Completado", "Completado"],
-                    ["Suspendido", "Suspendido"]
-                ])}
+            ["Activo", "Activo"],
+            ["Completado", "Completado"],
+            ["Suspendido", "Suspendido"]
+        ])}
             </div>
         `,
         async v => {
@@ -1549,8 +1612,8 @@ document.getElementById("btnNuevoTratamiento").addEventListener("click", () => {
                 (partes.length > 2) ||
                 (sesionesTotales !== null &&
                     (!Number.isInteger(sesionesTotales) ||
-                    sesionesTotales < 1 ||
-                    sesionesCompletadas > sesionesTotales))
+                        sesionesTotales < 1 ||
+                        sesionesCompletadas > sesionesTotales))
             ) {
                 throw new Error("Escribe las sesiones en el formato 0 / 10.");
             }
@@ -1646,12 +1709,40 @@ async function cargarTratamientosBD() {
         alert("No se pudieron cargar los tratamientos desde MySQL.");
     }
 }
+async function cargarCasosBD() {
+    try {
+        const respuesta = await fetch("api/casos/listar.php");
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(resultado.mensaje || "Error al consultar casos.");
+        }
+
+        if (resultado.casosClinicos.length > 0) {
+            datos.casosClinicos = resultado.casosClinicos.map(c => ({
+                ...c,
+                id: Number(c.id),
+                pacienteId: Number(c.pacienteId)
+            }));
+
+            actualizarTodo();
+        }
+
+        console.log("Casos clínicos consultados desde MySQL.");
+
+    } catch (error) {
+        console.error("Error al cargar casos clínicos:", error);
+        alert("No se pudieron cargar los casos clínicos desde MySQL.");
+    }
+}
 
 
 actualizarTodo();
 
 cargarPacientesBD().then(() => {
     cargarCitasBD().then(() => {
-        cargarTratamientosBD();
+        cargarTratamientosBD().then(() => {
+            cargarCasosBD();
+        });
     });
 });
