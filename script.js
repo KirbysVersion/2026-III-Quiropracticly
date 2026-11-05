@@ -32,6 +32,56 @@ function cargarDatos() {
 function guardarDatos() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
 }
+async function cargarPacientesBD() {
+    try {
+        const respuesta = await fetch("api/pacientes/listar.php");
+        const resultado = await respuesta.json();
+
+        if (!resultado.success) {
+            throw new Error(resultado.mensaje);
+        }
+
+        if (resultado.pacientes.length > 0) {
+            datos.pacientes = resultado.pacientes.map(p => ({
+                ...p,
+                id: Number(p.id),
+                edad: p.edad ? `${p.edad} años` : ""
+            }));
+
+            actualizarTodo();
+        }
+
+        console.log("Pacientes consultados desde MySQL.");
+
+    } catch (error) {
+        console.error("Error al cargar pacientes:", error);
+        alert("No se pudieron cargar los pacientes desde MySQL.");
+    }
+}
+async function cargarCitasBD() {
+    try {
+        const respuesta = await fetch("api/citas/listar.php");
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(resultado.mensaje);
+        }
+
+        datos.citas = resultado.citas.map(c => ({
+            ...c,
+            id: Number(c.id),
+            pacienteId: Number(c.pacienteId)
+        }));
+
+        actualizarTodo();
+
+        console.log("Citas consultadas desde MySQL.");
+
+    } catch (error) {
+        console.error("Error al cargar citas:", error);
+        alert("No se pudieron cargar las citas desde MySQL.");
+    }
+}
 
 function hoyISO() {
     const fecha = new Date();
@@ -263,9 +313,35 @@ function renderCitas() {
         `).join("");
 
     tbody.querySelectorAll("[data-delete-cita]").forEach(b =>
-        b.addEventListener("click", () => {
-            datos.citas = datos.citas.filter(c => c.id !== Number(b.dataset.deleteCita));
-            actualizarTodo();
+        b.addEventListener("click", async () => {
+            const id = Number(b.dataset.deleteCita);
+
+            if (!confirm("¿Deseas eliminar esta cita?")) return;
+
+            try {
+                const respuesta = await fetch("api/citas/eliminar.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                const resultado = await respuesta.json();
+
+                if (!respuesta.ok || !resultado.success) {
+                    throw new Error(resultado.mensaje);
+                }
+
+                datos.citas = datos.citas.filter(c => Number(c.id) !== id);
+                actualizarTodo();
+
+                alert("Cita eliminada correctamente.");
+
+            } catch (error) {
+                console.error(error);
+                alert(error.message || "No se pudo eliminar la cita.");
+            }
         })
     );
 
@@ -938,7 +1014,7 @@ document.addEventListener("keydown", e => {
     if (e.key === "Escape") cerrarModal();
 });
 
-/* FUNCIONES DE PACIENTES */
+
 
 function listaPacientes() {
     return datos.pacientes.length
@@ -955,7 +1031,7 @@ function editarPaciente(id) {
     const campos = `
         <div class="form-grid">
             ${campo("Nombre completo", "nombre", "text", { required: true })}
-            ${campo("Edad", "edad", "number", { min: 0 })}
+            ${campo("Fecha de nacimiento", "fechaNacimiento", "date")}
             ${campo("Teléfono", "telefono", "tel")}
             ${campoDiagnostico()}
             ${campo("Fecha de inicio", "fechaInicio", "date")}
@@ -973,29 +1049,49 @@ function editarPaciente(id) {
         "Editar paciente",
         "Actualiza los datos de su ficha.",
         campos,
-        v => {
+        async v => {
+            const respuesta = await fetch("api/pacientes/actualizar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: id,
+                    nombre: v.nombre.trim(),
+                    fechaNacimiento: v.fechaNacimiento,
+                    telefono: v.telefono.trim(),
+                    notas: v.notas.trim(),
+                    estado: v.estado
+                })
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "No se pudo actualizar el paciente.");
+            }
+
             Object.assign(p, {
                 nombre: v.nombre.trim(),
-                edad: v.edad,
+                fechaNacimiento: v.fechaNacimiento,
                 telefono: v.telefono.trim(),
+                edad: v.fechaNacimiento
+                    ? Math.floor((new Date() - new Date(v.fechaNacimiento)) / 31557600000) + " años"
+                    : "",
                 diagnostico: v.diagnostico.trim(),
                 fechaInicio: v.fechaInicio,
                 estado: v.estado,
                 notas: v.notas.trim()
             });
 
-            p.historial = p.historial || [];
-            p.historial.unshift({
-                fecha: hoyISO(),
-                descripcion: "Ficha del paciente actualizada"
-            });
-
             pacienteSeleccionado = id;
             actualizarTodo();
+
+            alert("Paciente actualizado correctamente.");
         },
         {
             nombre: p.nombre,
-            edad: p.edad,
+            fechaNacimiento: p.fechaNacimiento,
             telefono: p.telefono,
             diagnostico: p.diagnostico,
             fechaInicio: p.fechaInicio,
@@ -1005,57 +1101,79 @@ function editarPaciente(id) {
     );
 }
 
-function eliminarPaciente(id) {
+async function eliminarPaciente(id) {
     const p = pacientePorId(id);
 
-    if (!p || !confirm(`¿Eliminar la ficha de ${p.nombre} y sus citas, tratamientos y casos clínicos?`)) {
+    if (!p || !confirm(`¿Eliminar la ficha de ${p.nombre}?`)) {
         return;
     }
 
-    datos.pacientes = datos.pacientes.filter(x => x.id !== id);
-    datos.citas = datos.citas.filter(x => x.pacienteId !== id);
-    datos.tratamientos = datos.tratamientos.filter(x => x.pacienteId !== id);
-    datos.casosClinicos = datos.casosClinicos.filter(x => x.pacienteId !== id);
-
-    if (pacienteSeleccionado === id) {
-        pacienteSeleccionado = null;
-    }
-
-    actualizarTodo();
-
-    if (!pacienteSeleccionado) {
-        document.getElementById("nombrePaciente").textContent = "Selecciona un paciente";
-        document.getElementById("folioPaciente").textContent = "Folio —";
-
-        const avatar = document.getElementById("avatarPaciente");
-        avatar.textContent = "?";
-        avatar.style.background = "#555b4f";
-
-        document.getElementById("btnCitaPaciente").disabled = true;
-
-        [
-            "edadPaciente",
-            "telefonoPaciente",
-            "diagnosticoPaciente",
-            "inicioPaciente",
-            "estadoPaciente",
-            "notasPaciente"
-        ].forEach(id => {
-            document.getElementById(id).textContent = "—";
+    try {
+        const respuesta = await fetch("api/pacientes/eliminar.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: id })
         });
 
-        document.getElementById("historialPaciente").innerHTML =
-            "<p>Selecciona un paciente para consultar su historial.</p>";
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(resultado.mensaje || "No se pudo eliminar el paciente.");
+        }
+
+        datos.pacientes = datos.pacientes.filter(x => Number(x.id) !== Number(id));
+        datos.citas = datos.citas.filter(x => Number(x.pacienteId) !== Number(id));
+        datos.tratamientos = datos.tratamientos.filter(x => Number(x.pacienteId) !== Number(id));
+        datos.casosClinicos = datos.casosClinicos.filter(x => Number(x.pacienteId) !== Number(id));
+
+        if (Number(pacienteSeleccionado) === Number(id)) {
+            pacienteSeleccionado = null;
+        }
+
+        actualizarTodo();
+
+        if (!pacienteSeleccionado) {
+            document.getElementById("nombrePaciente").textContent = "Selecciona un paciente";
+            document.getElementById("folioPaciente").textContent = "Folio —";
+
+            const avatar = document.getElementById("avatarPaciente");
+            avatar.textContent = "?";
+            avatar.style.background = "#555b4f";
+
+            document.getElementById("btnCitaPaciente").disabled = true;
+
+            [
+                "edadPaciente",
+                "telefonoPaciente",
+                "diagnosticoPaciente",
+                "inicioPaciente",
+                "estadoPaciente",
+                "notasPaciente"
+            ].forEach(id => {
+                document.getElementById(id).textContent = "—";
+            });
+
+            document.getElementById("historialPaciente").innerHTML =
+                "<p>Selecciona un paciente para consultar su historial.</p>";
+        }
+
+        alert("Paciente eliminado correctamente.");
+
+    } catch (error) {
+        console.error(error);
+        alert(error.message);
     }
 }
 
-/* REGISTRO DE PACIENTES */
+
 
 document.getElementById("btnNuevoPaciente").addEventListener("click", () => {
     const campos = `
         <div class="form-grid">
             ${campo("Nombre completo", "nombre", "text", { required: true })}
-            ${campo("Edad", "edad", "number", { min: 0 })}
+            ${campo("Fecha de nacimiento", "fechaNacimiento", "date")}
             ${campo("Teléfono", "telefono", "tel")}
             ${campoDiagnostico()}
             ${campo("Fecha de inicio", "fechaInicio", "date")}
@@ -1090,14 +1208,31 @@ document.getElementById("btnNuevoPaciente").addEventListener("click", () => {
         "Nuevo paciente",
         "Completa la ficha; puedes incluir su cita inicial y tratamiento.",
         campos,
-        v => {
-            const id = siguienteId();
+        async v => {
+            const respuesta = await fetch("api/pacientes/guardar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(v)
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "No se pudo guardar el paciente.");
+            }
+
+            const id = Number(resultado.id);
 
             const paciente = {
                 id,
                 folio: `P-${String(id).padStart(4, "0")}`,
                 nombre: v.nombre.trim(),
-                edad: v.edad,
+                fechaNacimiento: v.fechaNacimiento,
+                edad: v.fechaNacimiento
+                    ? Math.floor((new Date() - new Date(v.fechaNacimiento)) / 31557600000) + " años"
+                    : "",
                 telefono: v.telefono.trim(),
                 diagnostico: v.diagnostico.trim(),
                 fechaInicio: v.fechaInicio || hoyISO(),
@@ -1138,27 +1273,69 @@ document.getElementById("btnNuevoPaciente").addEventListener("click", () => {
     );
 });
 
-/* CITAS */
 
-function cambiarEstadoCita(id, estado) {
-    const cita = datos.citas.find(c => c.id === id);
+
+async function cambiarEstadoCita(id, estado) {
+    const cita = datos.citas.find(c => Number(c.id) === Number(id));
     if (!cita) return;
 
-    cita.estadoAnterior = cita.estado;
-    cita.estado = estado;
+    try {
+        const respuesta = await fetch("api/citas/actualizar.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id, estado })
+        });
 
-    actualizarTodo();
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(resultado.mensaje);
+        }
+
+        cita.estadoAnterior = cita.estado;
+        cita.estado = estado;
+
+        actualizarTodo();
+
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "No se pudo actualizar la cita.");
+    }
 }
 
-function restaurarCita(id) {
-    const cita = datos.citas.find(c => c.id === id);
+async function restaurarCita(id) {
+    const cita = datos.citas.find(c => Number(c.id) === Number(id));
 
     if (!cita || !["Cancelada", "Completada"].includes(cita.estado)) return;
 
-    cita.estado = cita.estadoAnterior || "Pendiente";
-    delete cita.estadoAnterior;
+    const estado = cita.estadoAnterior || "Pendiente";
 
-    actualizarTodo();
+    try {
+        const respuesta = await fetch("api/citas/actualizar.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id, estado })
+        });
+
+        const resultado = await respuesta.json();
+
+        if (!respuesta.ok || !resultado.success) {
+            throw new Error(resultado.mensaje);
+        }
+
+        cita.estado = estado;
+        delete cita.estadoAnterior;
+
+        actualizarTodo();
+
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "No se pudo restaurar la cita.");
+    }
 }
 
 function abrirFormularioCita(pacienteId = null) {
@@ -1197,9 +1374,23 @@ function abrirFormularioCita(pacienteId = null) {
         ])}
             </div>
         `,
-        v => {
+        async v => {
+            const respuesta = await fetch("api/citas/guardar.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(v)
+            });
+
+            const resultado = await respuesta.json();
+
+            if (!respuesta.ok || !resultado.success) {
+                throw new Error(resultado.mensaje || "No se pudo registrar la cita.");
+            }
+
             datos.citas.push({
-                id: siguienteId(),
+                id: Number(resultado.id),
                 pacienteId: Number(v.pacienteId),
                 fecha: v.fecha,
                 hora: v.hora,
@@ -1266,7 +1457,7 @@ document.getElementById("btnNuevoTratamiento").addEventListener("click", () => {
     );
 });
 
-/* EVENTOS DE CASOS CLÍNICOS */
+
 
 document.getElementById("btnNuevoCaso").addEventListener("click", nuevoCaso);
 
@@ -1274,7 +1465,7 @@ document.getElementById("buscarCaso").addEventListener("input", e => {
     renderCasos(e.target.value);
 });
 
-/* BÚSQUEDA Y NAVEGACIÓN */
+
 
 document.getElementById("buscarPaciente").addEventListener("input", e => {
     renderPacientes(e.target.value);
@@ -1297,6 +1488,10 @@ document.querySelectorAll(".menu-item").forEach(b => {
     });
 });
 
-/* INICIALIZACIÓN */
+
 
 actualizarTodo();
+
+cargarPacientesBD().then(() => {
+    cargarCitasBD();
+});
